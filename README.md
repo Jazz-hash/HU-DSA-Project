@@ -8,7 +8,7 @@
 
 #### Environment: &nbsp; [![Python](https://img.shields.io/badge/Python-3.2%20and%20above-blue.svg)](https://pypi.org/project/pip/)
 
-#### Tested and verified by github actions: &nbsp; [![PFUN Project](https://github.com/Jazz-hash/HU-PFun-Project/workflows/PFUN%20Project/badge.svg)](https://github.com/Jazz-hash/HU-PFun-Project/actions/runs/383997240)
+#### Tested and verified by github actions: &nbsp; [![DSA Project](https://github.com/Jazz-hash/HU-DSA-Project/actions/workflows/main.yml/badge.svg)](https://github.com/Jazz-hash/HU-DSA-Project/actions/workflows/main.yml)
 
 ## Description
 
