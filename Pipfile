@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 flask = "*"
+gunicorn = "*"
+jinja2 = "*"
 
 [dev-packages]
 
-[requires]
-python_version = "3.8"
