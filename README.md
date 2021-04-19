@@ -4,7 +4,7 @@
 
 ### Encryptor &nbsp;&nbsp;[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg) &nbsp;![GitHub release](https://img.shields.io/github/release/Jazz-hash/HU-PFun-Project)](https://github.com/Jazz-hash/HU-PFun-Project)
 
-#### URL: [https://comingsoon.com/]()
+#### URL: [https://hu-encryptor.herokuapp.com/](https://hu-encryptor.herokuapp.com/)
 
 #### Environment: &nbsp; [![Python](https://img.shields.io/badge/Python-3.2%20and%20above-blue.svg)](https://pypi.org/project/pip/)
 
