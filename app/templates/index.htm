@@ -29,6 +29,12 @@
       rel="stylesheet"
       href="{{ url_for('static', filename= 'css/style.css') }}"
     />
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+
   </head>
 
   <body
@@ -60,7 +66,7 @@
       <div class="container">
         <!-- Logo -->
         <a class="logo" href="/">
-          <h4 class="styled-font">Encryptor</h4>
+          <h4 class="styled-font" style="color: white !important;">Encryptor</h4>
         </a>
 
         <button
@@ -81,7 +87,7 @@
             <li class="nav-item">
               <a
                 class="nav-link active"
-                href="Encryptor/creative.html#"
+                href="/"
                 data-scroll-nav="0"
                 >Home</a
               >
@@ -89,7 +95,7 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-                href="Encryptor/creative.html#"
+                href="#About"
                 data-scroll-nav="1"
                 >About</a
               >
@@ -97,41 +103,9 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-                href="Encryptor/creative.html#"
+                href="#Feedback"
                 data-scroll-nav="2"
-                >Portfolio</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="Encryptor/creative.html#"
-                data-scroll-nav="3"
-                >Services</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="Encryptor/creative.html#"
-                data-scroll-nav="4"
-                >Price</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="Encryptor/creative.html#"
-                data-scroll-nav="5"
-                >Blog</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="Encryptor/creative.html#"
-                data-scroll-nav="6"
-                >Contact</a
+                >Feedback</a
               >
             </li>
           </ul>
@@ -167,18 +141,29 @@
       <div class="container">
         <div class="row p-5" style="background-color: rgba(0, 0, 0, 0.7)">
           <div class="full-width text-center caption mt-30">
-            <h3 class="text-white">We Are Creative</h3>
+            <h3 class="text-white">We Are <span class="styled-font">Encryptor</span></h3>
             <h1 class="cd-headline clip">
-              <span class="blc">The Way Of </span>
+              <span class="blc">We help</span>
               <span class="cd-words-wrapper" style="width: 328.984px">
-                <b class="is-visible">Success</b>
-                <b class="is-hidden">Grow Up</b>
-                <b class="is-hidden">Dream</b>
+                <b class="is-visible">Protect</b>
+                <b class="is-hidden">Secure</b>
+                <b class="is-hidden">Safe guard</b>
               </span>
             </h1>
             <p>
-              A single place to share, curate and discover visual that tells a
-              story.
+             <form class="w-75 m-auto" method="POST" action="" enctype="multipart/form-data">
+              <div class="form-group">
+                 <label for="key">File </label>
+                 <input type="text" placeholder="Enter any key" name="key" id="key" class="form-control" />
+               </div>
+               <div class="form-group">
+                 <label for="file">File </label>
+                 <input type="file" name="file" id="file" class="form-control" />
+               </div>
+               <div class="form-grouo">
+                 <input type="submit" value="Submit">
+               </div>
+             </form>
             </p>
             <a href="Encryptor/creative.html#0" class="butn butn-bord">
               <span>Learn More</span>
@@ -199,7 +184,13 @@
 
     <!-- End Header ====
     	======================================= -->
+<div id="About" style="height: 500px">
+  <h3>About</h3>
+</div>
 
+<div id="Feedback" style="height: 500px">
+  <h1>Feedback</h1>
+</div>
     <!-- =====================================
     	==== Start Footer -->
     <footer class="text-center">

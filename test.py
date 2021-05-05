@@ -1,3 +1,5 @@
-from flask import Flask
-
-print("Test Passed ! All libraries working.")
+print([1, 2] is [1, 2, 3,4])
+print([2, 1] in [1, 2, 3,4])
+print([1, 4] in [1, 2, 3,4])
+print([1, 3] in [1, 2, 3,4])
+print([1] in [1, 2, 3,4])
