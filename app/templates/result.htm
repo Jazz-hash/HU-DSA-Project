@@ -141,55 +141,23 @@
                 <b class="is-hidden">Safe guard</b>
               </span>
             </h1>
-            <form
-              class="w-75 m-auto"
-              method="POST"
-              action=""
-              id="form"
-              enctype="multipart/form-data"
-            >
-              <div class="form-group">
-                <label for="key">File </label>
-                <input
-                  type="text"
-                  placeholder="Enter any key"
-                  name="key"
-                  id="key"
-                  class="form-control"
-                />
-              </div>
-              <div class="form-check" style="float: left">
-                <label class="form-check-label text-white">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    name="key-creator"
-                    id="key-creator"
-                  />
-                  Let us create the key for you.
-                </label>
-              </div>
-              <div class="form-group">
-                <label for="file">File </label>
-                <input
-                  type="file"
-                  required="required"
-                  name="file"
-                  id="file"
-                  class="form-control"
-                />
-                <small class="text-white d-none" id="error" style="float: left">
-                  <span class="text-danger h5">*</span>File is required
-                </small>
-              </div>
-            </form>
-            <br />
-            <a id="submit" class="butn butn-bg">
-              <span>Give it a try</span>
-            </a>
-            <a href="Encryptor/creative.html#0" class="butn butn-bord">
-              <span>Learn More</span>
-            </a>
+            <div class="jumbotron bg-transparent p-2 w-75 m-auto">
+              <h3 class="h5 text-white">Here is your file</h3>
+              <hr class="my-2 bg-light" />
+              <p>Key: ******</p>
+              <p>
+                Keep it hidden from the people you don't trust for the security
+                of the file and yours too.
+              </p>
+              <p class="lead">
+                <a id="submit" class="butn butn-bg">
+                  <span>Download</span>
+                </a>
+                <a href="Encryptor/creative.html#0" class="butn butn-bord">
+                  <span>Email</span>
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -254,28 +222,5 @@
 
     <!-- animated.headline -->
     <script src=".{{ url_for('static', filename= 'js/animated.headline.js') }}"></script>
-    <script>
-      $(function () {
-        enable_cb();
-        $("#key-creator").click(enable_cb);
-      });
-
-      function enable_cb() {
-        if (this.checked) {
-          $("#key").addClass("disabled");
-          $("#key").attr("disabled", "disabled");
-        } else {
-          $("#key").removeAttr("disabled");
-          $("#key").removeClass("disabled");
-        }
-      }
-
-      $("#submit").on("click", function (e) {
-        e.preventDefault();
-
-        if ($("#file").val()) $("#form").submit();
-        else $("#error").removeClass("d-none");
-      });
-    </script>
   </body>
 </html>

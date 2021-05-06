@@ -18,11 +18,15 @@ def index():
         if uploaded_file.filename != '':
             file = secure_filename(uploaded_file.filename)
             uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file))
-            new_file = encrypt(file, key)  
+            new_file = encrypt(file, key)
+            return redirect(url_for("result"))  
             # uploaded_file.save(uploaded_file.filename)
         return redirect(url_for('index'))
     return render_template('index.htm')
 
+@app.route("/result", methods=["GET"])
+def result():
+    return render_template("result.htm")
 
 def encrypt(filename, key):
     print(filename, key)
