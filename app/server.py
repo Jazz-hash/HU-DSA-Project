@@ -29,9 +29,11 @@ def index():
             file = secure_filename(uploaded_file.filename)
             uploaded_file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], file))
             encrypted = ""
-            with open(f"{UPLOAD_FOLDER}/{FILENAME}", "r") as fileReader:
+            path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{FILENAME}"
+            print(path)
+            with open(path, "r") as fileReader:
                 encrypted = initEncryption(fileReader.read(), key)
-            with open(f"{UPLOAD_FOLDER}/{FILENAME}", "w") as fileWriter:
+            with open(path, "w") as fileWriter:
                 fileWriter.write(encrypted)
             return redirect(url_for("result", key=key, filename=FILENAME))  
             # uploaded_file.save(uploaded_file.filename)
