@@ -128,8 +128,8 @@
       </div>
 
       <div class="container">
-        <div class="row p-5" style="background-color: rgba(0, 0, 0, 0.7)">
-          <div class="full-width text-center caption mt-30">
+        <div class="row p-4" style="background-color: rgba(0, 0, 0, 0.7)">
+          <div class="full-width text-center caption mt-30 ml-4 mr-4">
             <h3 class="text-white">
               We Are <span class="styled-font">Encryptor</span>
             </h3>
@@ -142,6 +142,50 @@
               </span>
             </h1>
             <form
+              id="decryption-form"
+              class="w-75 m-auto"
+              method="POST"
+              action=""
+              id="form"
+              enctype="multipart/form-data"
+            >
+              <div class="form-group">
+                <label for="key">File </label>
+                <input
+                  type="text"
+                  placeholder="Enter any key"
+                  name="dKey"
+                  id="dKey"
+                  required
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="file">File </label>
+                <input
+                  type="file"
+                  required="required"
+                  name="dFile"
+                  id="dFile"
+                  class="form-control"
+                />
+                <small
+                  class="text-white d-none"
+                  id="dError"
+                  style="float: left"
+                >
+                  <span class="text-danger h5">*</span>File and key both are
+                  required
+                </small>
+              </div>
+              <br />
+
+              <a id="submit-de" class="butn butn-bg">
+                <span>Decrypt</span>
+              </a>
+            </form>
+            <form
+              id="encryption-form"
               class="w-75 m-auto"
               method="POST"
               action=""
@@ -174,21 +218,29 @@
                 <input
                   type="file"
                   required="required"
-                  name="file"
-                  id="file"
+                  name="eFile"
+                  id="eFile"
                   class="form-control"
                 />
                 <small class="text-white d-none" id="error" style="float: left">
                   <span class="text-danger h5">*</span>File is required
                 </small>
               </div>
+
+              <input type="hidden" name="type" id="type" value="encryption" />
+              <br />
+
+              <a id="submit-en" class="butn butn-bg">
+                <span>Encrypt</span>
+              </a>
             </form>
+            <div id="loading" class="jumbotron text-center">Loading...</div>
             <br />
-            <a id="submit" class="butn butn-bg">
-              <span>Give it a try</span>
+            <a class="butn butn-bord" id="show-decrypt">
+              <span>Try Decryption</span>
             </a>
-            <a href="Encryptor/creative.html#0" class="butn butn-bord">
-              <span>Learn More</span>
+            <a class="butn butn-bord" id="show-encrypt">
+              <span>Try Encryption</span>
             </a>
           </div>
         </div>
@@ -260,6 +312,61 @@
         $("#key-creator").click(enable_cb);
       });
 
+      var encryptForm = document.getElementById("encryption-form");
+      var decryptForm = document.getElementById("decryption-form");
+      var loading = document.getElementById("loading");
+      var encrypt = document.getElementById("show-encrypt");
+      loading.style = "display: none";
+      encryptForm.style = "display: none";
+      decryptForm.style = "display: none";
+
+      encrypt.onclick = function () {
+        encryptForm.style = "display: none";
+        decryptForm.style = "display: none";
+        encrypt.style = "display: none";
+        loading.style = "display: block";
+        decrypt.style = "display: block";
+        setTimeout(() => {
+          loading.style = "display: none";
+          encryptForm.style = "display: block";
+        }, 2000);
+      };
+
+      var decrypt = document.getElementById("show-decrypt");
+      decrypt.onclick = function () {
+        console.log("decrupt");
+        encryptForm.style = "display: none";
+        decryptForm.style = "display: none";
+        loading.style = "display: block";
+        encrypt.style = "display: block";
+        decrypt.style = "display: none";
+
+        setTimeout(() => {
+          loading.style = "display: none";
+          decryptForm.style = "display: block";
+        }, 2000);
+      };
+
+      // $("#show-encrypt").on("click", function () {
+      //   $("#decryption-form").css("display", "none");
+      //   $("#encryption-form").css("display", "none");
+      //   $("#loading").removeClass("d-none");
+      //   //   setInterval(() => {
+      //   //     $("#loading").addClass("d-none");
+      //   //     $("#encryption-form").removeClass("d-none");
+      //   //   }, 2000);
+      // });
+
+      // $("#show-decrypt").on("click", function () {
+      //   $("#encryption-form").css("display", "none");
+      //   $("#decryption-form").css("display", "none");
+      //   $("#loading").removeClass("d-none");
+      //   setInterval(() => {
+      //     $("#loading").addClass("d-none");
+      //     $("#decryption-form").css("display", "block");
+      //   }, 2000);
+      // });
+
       function enable_cb() {
         if (this.checked) {
           $("#key").addClass("disabled");
@@ -270,11 +377,23 @@
         }
       }
 
-      $("#submit").on("click", function (e) {
+      $("#submit-en").on("click", function (e) {
+        e.preventDefault();
+        console.log("Da");
+        if ($("#eFile").val()) {
+          $("#encryption-form").submit();
+        } else $("#error").removeClass("d-none");
+      });
+
+      $("#submit-de").on("click", function (e) {
         e.preventDefault();
 
-        if ($("#file").val()) $("#form").submit();
-        else $("#error").removeClass("d-none");
+        console.log("Das");
+        console.log($("#dFile").val());
+        console.log($("#dKey").text());
+        if ($("#dFile").val() && $("#dKey").val()) {
+          $("#decryption-form").submit();
+        } else $("#dError").removeClass("d-none");
       });
     </script>
   </body>
