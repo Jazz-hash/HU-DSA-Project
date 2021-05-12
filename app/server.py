@@ -181,4 +181,3 @@ def result():
 def download(filename):
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{filename}"
     return send_file(uploads, as_attachment=True)
-
