@@ -8,7 +8,7 @@ import random
 import re
 
 UPLOAD_FOLDER = 'uploads'
-KEY_LENGTH = 10
+KEY_LENGTH = 12
 FILENAME = "test.txt"
 
 # ? Creating app with Flask
@@ -55,7 +55,7 @@ def replaceWords(words, maximumFrequencyOccurence, key):
             wordASCII = ""
             for letter in word:
                 wordASCII += "{0:03d}".format(ord(letter))
-            newWord = str(ord(key[0])) + key[:len(key) // 2] + str(wordASCII) + key[len(key) // 2:] + str(ord(key[-1]))
+            newWord = "{0:03d}".format(ord(key[0])) + key[:len(key) // 2] + str(wordASCII) + key[len(key) // 2:] + "{0:03d}".format(ord(key[-1]))
             replacements[word] = newWord
     return replacements
     
@@ -99,20 +99,33 @@ def enQueue(queue, item, priority = 0):
     queue.append((item, priority))
 
 def removeKey(words, key):
+    if len(key) < 12:
+        return None
     keyLessWords = []
-    key0 = str(ord(key[0]))
+    key0 = "{0:03d}".format(ord(key[0]))
     key1 = key[:len(key) // 2]
     key2 = key[len(key) // 2:]
-    key3 = str(ord(key[-1]))
+    key3 = "{0:03d}".format(ord(key[-1]))
+    print(key1, key2)
+    
     for word in words:
         priority = 0
-        if word[:3] == key0:
+        if word[:3] == key0 and key1 == word[3:9]:
             word = replace(word, [key0, key1, key2, key3])
             priority = 1
         enQueue(keyLessWords, word, priority)
     return keyLessWords
     
+def checkDecryption(keyLessWords):
+    keyError = True
+    for word, level in keyLessWords:
+        if level == 1:
+            keyError = False
+    return keyError
+
 def convertEncryptedToWords(encrypted):
+    if checkDecryption(encrypted):
+        return None
     words = []
     for word, level in encrypted:
         if level == 1:
@@ -126,9 +139,14 @@ def wordsToFile(words):
 def initDecryption(encrypted, key):
     words = encrypted.lower().split(" ")[:-1]
     keyLessWords = removeKey(words, key)
-    replacedWords = convertEncryptedToWords(keyLessWords)  
-    result = wordsToFile(replacedWords)
-    return result
+    print(keyLessWords)
+    if keyLessWords:
+        print(keyLessWords, "0000000000000")
+        replacedWords = convertEncryptedToWords(keyLessWords)  
+        if replacedWords:
+            result = wordsToFile(replacedWords)
+            return result
+    return None
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -163,6 +181,9 @@ def index():
                 print(path, "-------------------------------------")
                 with open(path, "r") as fileReader:
                     decrypted = initDecryption(fileReader.read(), key)
+                print(decrypted, " -----------------")
+                if decrypted == "" or not decrypted:
+                    return redirect(url_for('error'))
                 with open(path, "w") as fileWriter:
                     fileWriter.write(decrypted)
                 return redirect(url_for("result", key=key, filename=file))  
@@ -181,3 +202,7 @@ def result():
 def download(filename):
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{filename}"
     return send_file(uploads, as_attachment=True)
+
+@app.route("/error", methods=["GET"])
+def error():
+    return "Error"

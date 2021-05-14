@@ -38,7 +38,7 @@ def replaceWords(words, maximumFrequencyOccurence, key):
             wordASCII = ""
             for letter in word:
                 wordASCII += "{0:03d}".format(ord(letter))
-            newWord = str(ord(key[0])) + key[:len(key) // 2] + str(wordASCII) + key[len(key) // 2:] + str(ord(key[-1]))
+            newWord = "{0:03d}".format(ord(key[0])) + key[:len(key) // 2] + str(wordASCII) + key[len(key) // 2:] + "{0:03d}".format(ord(key[-1]))
             replacements[word] = newWord
     return replacements
     

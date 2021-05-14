@@ -1473,7 +1473,7 @@ footer p {
     padding-bottom: 50px;
   }
 }
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
   .mb-sm50 {
     margin-bottom: 50px;
   }
@@ -1501,5 +1501,27 @@ footer p {
     display: none;
   }
 }
+@media screen and (max-width: 425px) {
+  .header .caption h1 {
+    font-size: 23px;
+  }
 
-/*# sourceMappingURL=style.css.map */
+  .form-control {
+    font-size: 9px;
+  }
+  .butn {
+    font-size: 9px !important;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .form-control {
+    font-size: 7px;
+  }
+  .header .caption h3 {
+    font-size: 10px !important;
+  }
+  .header .caption h1 {
+    font-size: 15px !important;
+  }
+}
