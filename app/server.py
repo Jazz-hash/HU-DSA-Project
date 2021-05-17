@@ -4,8 +4,8 @@ from werkzeug.utils import secure_filename
 import os
 import string    
 import random
-
 import re
+from flask_mail import Mail, Message
 
 UPLOAD_FOLDER = 'uploads'
 KEY_LENGTH = 12
@@ -15,16 +15,26 @@ FILENAME = "test.txt"
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'travellingdiaries2019@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Travel1234'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
+
 def generateKey():
     ran = ''.join(random.choices(string.ascii_lowercase + string.digits, k = KEY_LENGTH))    
     key = str(ran)
     return key
 
-def getWordsFromLineList(sentences):
-    wordsList = []
-    for sentence in sentences:
-        wordsList += re.sub('['+string.punctuation+']', '', sentence).split()
-    return wordsList
+def removePunctuation(data):
+    data = re.sub(r"[,.;@#?!&$]+\ *", " ", data)
+    return data
+
+def getWordsFromLineList(data):
+    return data.split(" ")
 
 def countFrequency(wordsList):
     wordsWithFrequencies = {}
@@ -76,11 +86,13 @@ def initEncryption(data, key):
 
     if not key:
         key = generateKey()
+    data = removeDetails(data, "Decryption")
+    print(data)
     
-    sentences = data.lower().split(".")[:-1]
-
-    words = getWordsFromLineList(sentences)
+    data = removePunctuation(data)
+    words = getWordsFromLineList(data)
     wordsWithFrequencies = countFrequency(words)
+    print(wordsWithFrequencies)
     frequencies = countFrequencyLength(wordsWithFrequencies)
     maximumFrequencyOccurence = bubble_sort(frequencies)[0][0]
     replacedWords = replaceWords(wordsWithFrequencies, maximumFrequencyOccurence, key)
@@ -137,6 +149,7 @@ def wordsToFile(words):
     return " ".join(words)
 
 def initDecryption(encrypted, key):
+    encrypted = removeDetails(encrypted, "Encryption")
     words = encrypted.lower().split(" ")[:-1]
     keyLessWords = removeKey(words, key)
     print(keyLessWords)
@@ -148,6 +161,15 @@ def initDecryption(encrypted, key):
             return result
     return None
 
+def removeDetails(result, type):
+    copyrightLine = f"\n\n\n  {type} by Encryptor - visit https://hu-encryptor.herokuapp.com/ to encrypt/decrypt more files !!  \n\n\n"
+    result = result.replace(copyrightLine, "")
+    return result
+
+def addDetails(result, type):
+    copyrightLine = f"\n\n\n  {type} by Encryptor - visit https://hu-encryptor.herokuapp.com/ to encrypt/decrypt more files !!  \n\n\n"
+    return result + copyrightLine
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -157,7 +179,8 @@ def index():
         if _type == "encryption":
             uploaded_file = request.files['eFile']
             key = request.form.get("key")
-            key = key if key != "" else generateKey()
+            if key == "":
+                key = generateKey()
             print(key)
             if uploaded_file.filename != '':
                 file = secure_filename(uploaded_file.filename)
@@ -166,6 +189,8 @@ def index():
                 path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{file}"
                 with open(path, "r") as fileReader:
                     encrypted = initEncryption(fileReader.read(), key)
+                if encrypted:
+                    encrypted = addDetails(encrypted, "Encryption")
                 with open(path, "w") as fileWriter:
                     fileWriter.write(encrypted)
                 return redirect(url_for("result", key=key, filename=file))  
@@ -181,7 +206,8 @@ def index():
                 print(path, "-------------------------------------")
                 with open(path, "r") as fileReader:
                     decrypted = initDecryption(fileReader.read(), key)
-                print(decrypted, " -----------------")
+                if decrypted:
+                    decrypted = addDetails(decrypted, "Decryption")
                 if decrypted == "" or not decrypted:
                     return redirect(url_for('error'))
                 with open(path, "w") as fileWriter:
@@ -205,4 +231,17 @@ def download(filename):
 
 @app.route("/error", methods=["GET"])
 def error():
-    return "Error"
+    return render_template("error.htm")
+
+@app.route("/sendMail")
+def sendMail():
+    key = request.args.get("key")
+    filename = request.args.get("filename")
+    msg = Message('Your file is ready', sender = 'travellingdiaries2019@gmail.com', recipients = ['jazzelmehmood6@gmail.com'])
+    msg.body = f"Key = {key} \nEnjoy !!"
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{filename}"
+    print(uploads)
+    with app.open_resource(uploads) as fp:        
+        msg.attach("file.txt", "text/txt", fp.read())
+    mail.send(msg)
+    return redirect(url_for('index'))

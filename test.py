@@ -1,5 +1,6 @@
-print([1, 2] is [1, 2, 3,4])
-print([2, 1] in [1, 2, 3,4])
-print([1, 4] in [1, 2, 3,4])
-print([1, 3] in [1, 2, 3,4])
-print([1] in [1, 2, 3,4])
+from flask import Flask, render_template, request, redirect, url_for, send_file
+from werkzeug.utils import secure_filename
+import os
+import string    
+import random
+import re

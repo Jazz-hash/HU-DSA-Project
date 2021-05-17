@@ -1,16 +1,16 @@
+<!-- Main Page (Index) - HTML  FILE -->
+
 <!DOCTYPE html>
 <html lang="zxx">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!-- Metas -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-
-    <meta name="author" content="" />
 
     <!-- Title  -->
     <title>Encryptor</title>
@@ -29,6 +29,8 @@
       rel="stylesheet"
       href="{{ url_for('static', filename= 'css/style.css') }}"
     />
+    <!-- Extra styling -->
+
     <style>
       html {
         scroll-behavior: smooth;
@@ -48,29 +50,13 @@
       }
     </style>
   </head>
-
+  <!-- =====================================
+    	==== Start Body -->
   <body
     data-new-gr-c-s-check-loaded="14.1006.0"
     data-gr-ext-installed=""
     class="vsc-initialized"
   >
-    <!-- =====================================
-    	==== Start Loading -->
-
-    <div class="loading" style="display: none">
-      <div class="text-center middle">
-        <div class="lds-ellipsis">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- End Loading ====
-    	======================================= -->
-
     <!-- =====================================
     	==== Start Navbar -->
 
@@ -154,6 +140,9 @@
                 <b class="is-hidden">Safe guard</b>
               </span>
             </h1>
+
+            <!-- Decryption form -->
+
             <form
               id="decryption-form"
               class="w-75 m-auto"
@@ -197,6 +186,7 @@
                 <span>Decrypt</span>
               </a>
             </form>
+            <!-- Encryption form -->
             <form
               id="encryption-form"
               class="w-75 m-auto"
@@ -271,6 +261,9 @@
 
     <!-- End Header ====
     	======================================= -->
+    <!-- Start About ====
+        ======================================= -->
+
     <div id="About" style="margin-top: 90px">
       <div class="container text-center">
         <div class="h1 styled-font2">A little information About us</div>
@@ -292,8 +285,13 @@
         </p>
       </div>
     </div>
+    <!-- End About ====
+        ======================================= -->
 
-    <div id="About" style="margin-top: 90px; margin-bottom: 90px">
+    <!-- Start About ====
+        ======================================= -->
+
+    <div id="Feedback" style="margin-top: 90px; margin-bottom: 90px">
       <div class="container text-center">
         <div class="h1 styled-font2">Feedback</div>
         <p>We are always open for feedbacks and reviews.</p>
@@ -305,6 +303,8 @@
         </p>
       </div>
     </div>
+    <!-- End Feedback ====
+        ======================================= -->
     <!-- =====================================
     	==== Start Footer -->
     <footer class="text-center">
@@ -331,20 +331,28 @@
 
     <!-- animated.headline -->
     <script src=".{{ url_for('static', filename= 'js/animated.headline.js') }}"></script>
+
+    <!-- Extra JS/JQuery code for validations  -->
     <script>
+      // Running on load to check wether the key checkbox is enabled or not
       $(function () {
         enable_cb();
         $("#key-creator").click(enable_cb);
       });
 
+      // declaring variables
       var encryptForm = document.getElementById("encryption-form");
       var decryptForm = document.getElementById("decryption-form");
       var loading = document.getElementById("loading");
       var encrypt = document.getElementById("show-encrypt");
+      var decrypt = document.getElementById("show-decrypt");
+
+      // default state - hiding forms
       loading.style = "display: none";
       encryptForm.style = "display: none";
       decryptForm.style = "display: none";
 
+      // onClick function of Try encrption button
       encrypt.onclick = function () {
         encryptForm.style = "display: none";
         decryptForm.style = "display: none";
@@ -357,7 +365,7 @@
         }, 2000);
       };
 
-      var decrypt = document.getElementById("show-decrypt");
+      // onClick function of Try decrption button
       decrypt.onclick = function () {
         console.log("decrupt");
         encryptForm.style = "display: none";
@@ -372,6 +380,7 @@
         }, 2000);
       };
 
+      // checkbox enabled/disabled check
       function enable_cb() {
         if (this.checked) {
           $("#key").addClass("disabled");
@@ -382,12 +391,12 @@
         }
       }
 
+      // submiting encryption form with validation check
       $("#submit-en").on("click", function (e) {
         e.preventDefault();
 
-        // $("#eError").
-
         var customKey = $("#key-creator").prop("checked") == true;
+        console.log(customKey);
 
         if (!customKey) {
           if ($("#key").val().length >= 12) {
@@ -396,9 +405,14 @@
               $("#encryption-form").submit();
             } else $("#error").removeClass("d-none");
           } else $("#eError").removeClass("d-none");
-        } else $("#eError").addClass("d-none");
+        } else {
+          $("#eError").addClass("d-none");
+          if ($("#eFile").val()) {
+            $("#encryption-form").submit();
+          } else $("#error").removeClass("d-none");
+        }
       });
-
+      // submiting decryption form with validation check
       $("#submit-de").on("click", function (e) {
         e.preventDefault();
 
