@@ -13,7 +13,7 @@ KEY_LENGTH = 12
 FILENAME = "test.txt"
 
 # ? Creating app with Flask
-app = Flask(__name__)
+app = Flask(_name_)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # setting smtp sever variables
 app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -102,15 +102,18 @@ def initEncryption(data, key):
 
     return encryptedData
 
+# replacing ids from words
 def replace(word, replacements):
     word = word[:3].replace(replacements[0], "") + word[3:-3] +  word[-3:].replace(replacements[-1], "")
     for replacement in replacements[1:-1]:
         word = word.replace(replacement, "")
     return word
 
+# initalized a queue for handling encrypted and non-encrypted textx
 def enQueue(queue, item, priority = 0):
     queue.append((item, priority))
 
+# removing keey from encrypted text
 def removeKey(words, key):
     if len(key) < 12:
         return None
@@ -129,6 +132,7 @@ def removeKey(words, key):
         enQueue(keyLessWords, word, priority)
     return keyLessWords
     
+# checking if key is correct or not 
 def checkDecryption(keyLessWords):
     keyError = True
     for word, level in keyLessWords:
@@ -136,6 +140,7 @@ def checkDecryption(keyLessWords):
             keyError = False
     return keyError
 
+# convert encrypted words to words
 def convertEncryptedToWords(encrypted):
     if checkDecryption(encrypted):
         return None
@@ -146,9 +151,11 @@ def convertEncryptedToWords(encrypted):
         words.append(word)
     return words
         
+# Converting words to file
 def wordsToFile(words):
     return " ".join(words)
 
+# initializing decryption
 def initDecryption(encrypted, key):
     encrypted = removeDetails(encrypted, "Encryption")
     words = encrypted.lower().split(" ")[:-1]
@@ -162,11 +169,13 @@ def initDecryption(encrypted, key):
             return result
     return None
 
+# removing footer
 def removeDetails(result, type):
     copyrightLine = f"\n\n\n  {type} by Encryptor - visit https://hu-encryptor.herokuapp.com/ to encrypt/decrypt more files !!  \n\n\n"
     result = result.replace(copyrightLine, "")
     return result
 
+# ADding footer
 def addDetails(result, type):
     copyrightLine = f"\n\n\n  {type} by Encryptor - visit https://hu-encryptor.herokuapp.com/ to encrypt/decrypt more files !!  \n\n\n"
     return result + copyrightLine
