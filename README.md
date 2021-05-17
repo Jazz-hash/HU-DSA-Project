@@ -120,3 +120,35 @@ The algorithm we used to implement this logic:
 - Docs: `cd <project-main-directory>/docs/`
   - Project-Report.pdf
   - Project-Manual.pdf
+
+## Application Usage
+
+- Open [https://hu-encryptor.herokuapp.com/](https://hu-encryptor.herokuapp.com/) or run locally by going through the <b> Available Scripts </b> section.
+
+![index](https://github.com/Jazz-hash/HU-DSA-Project/blob/main/screenshots/home.png?raw=true)
+
+- Choose anything you want to do. Let's choose encryption.
+
+![index](https://github.com/Jazz-hash/HU-DSA-Project/blob/main/screenshots/encryption.png?raw=true)
+
+- If you want to add your own custom key, you can add it filling in the key field or just let our sytem create the key for you by enabling the checkbox below text-field.
+- Then upload the file you want to encrypt or decrypt.
+
+![index](https://github.com/Jazz-hash/HU-DSA-Project/blob/main/screenshots/result.png?raw=true)
+
+- Now you can choose to download the file or email the file.
+
+![index](https://github.com/Jazz-hash/HU-DSA-Project/blob/main/screenshots/decryption.png?raw=true)
+
+- Now, for the decryption you have to fill out the decryption form by clicking "Try decryption" button on the home page.
+- Key and file both are required for decryption.
+
+![index](https://github.com/Jazz-hash/HU-DSA-Project/blob/main/screenshots/error.png?raw=true)
+
+- If your provided key is wrong it will give a key error.
+- If it is true then you can again choose between emailing or downloading the file.
+
+Enjoyyy !!
+
+[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)&nbsp;![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+]()
