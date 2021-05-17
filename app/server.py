@@ -7,6 +7,7 @@ import random
 import re
 from flask_mail import Mail, Message
 
+# Setting constansts
 UPLOAD_FOLDER = 'uploads'
 KEY_LENGTH = 12
 FILENAME = "test.txt"
@@ -14,7 +15,7 @@ FILENAME = "test.txt"
 # ? Creating app with Flask
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+# setting smtp sever variables
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'travellingdiaries2019@gmail.com'
@@ -171,11 +172,16 @@ def addDetails(result, type):
     return result + copyrightLine
 
 
+# Routes
+
+# Index route
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         _type = request.form.get("type")
         print(_type) 
+
+        # Encryption
         if _type == "encryption":
             uploaded_file = request.files['eFile']
             key = request.form.get("key")
@@ -183,58 +189,83 @@ def index():
                 key = generateKey()
             print(key)
             if uploaded_file.filename != '':
+                # saving file in uploads dir
                 file = secure_filename(uploaded_file.filename)
                 uploaded_file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], file))
                 encrypted = ""
                 path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{file}"
+                # reading file
                 with open(path, "r") as fileReader:
+                    # applying encryption
                     encrypted = initEncryption(fileReader.read(), key)
+                    # adding footer of our app
                 if encrypted:
                     encrypted = addDetails(encrypted, "Encryption")
+                    # re-writting file
                 with open(path, "w") as fileWriter:
                     fileWriter.write(encrypted)
-                return redirect(url_for("result", key=key, filename=file))  
+                    # return result route with key and filename
+                return redirect(url_for("result", key=key, filename=file))
+        
+        # Decryption
         else:
             uploaded_file = request.files['dFile']
             key = request.form.get("dKey")
             if uploaded_file.filename != '':
                 file = secure_filename(uploaded_file.filename)
                 print(file)
+                # saving file in uploads dir
                 uploaded_file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], file))
                 decrypted = ""
                 path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{file}"
-                print(path, "-------------------------------------")
+                # print(path, "-------------------------------------")
+                # reading file
                 with open(path, "r") as fileReader:
                     decrypted = initDecryption(fileReader.read(), key)
+                    # adding footer of our app
                 if decrypted:
                     decrypted = addDetails(decrypted, "Decryption")
+                    # checking if key is right or wrong
                 if decrypted == "" or not decrypted:
+                    # return error route
                     return redirect(url_for('error'))
+                    # re-writting file
                 with open(path, "w") as fileWriter:
                     fileWriter.write(decrypted)
+                    # return result route with key and filename
                 return redirect(url_for("result", key=key, filename=file))  
         return redirect(url_for('index'))
     return render_template('index.htm')
 
+# Result route
 @app.route("/result", methods=["GET"])
 def result():
     key = request.args.get("key")
     filename = request.args.get("filename")
     if key == "":
+        # if not key return to index
         return redirect(url_for('index'))
+    # return result page with key and filename
     return render_template("result.htm",  key=key, filename=filename)
 
+# Download route
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{filename}"
+    # download file 
     return send_file(uploads, as_attachment=True)
 
+# Error route
 @app.route("/error", methods=["GET"])
 def error():
+    # render error page
     return render_template("error.htm")
 
+# Mailing route
 @app.route("/sendMail")
 def sendMail():
+    # sending mail with smtp server
+
     key = request.args.get("key")
     filename = request.args.get("filename")
     msg = Message('Your file is ready', sender = 'travellingdiaries2019@gmail.com', recipients = ['jazzelmehmood6@gmail.com'])
