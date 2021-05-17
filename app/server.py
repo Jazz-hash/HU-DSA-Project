@@ -13,7 +13,7 @@ KEY_LENGTH = 12
 FILENAME = "test.txt"
 
 # ? Creating app with Flask
-app = Flask(_name_)
+app = Flask(name)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # setting smtp sever variables
 app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -24,31 +24,36 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
-
+# Genrating a random key if user donot provide key
 def generateKey():
     ran = ''.join(random.choices(string.ascii_lowercase + string.digits, k = KEY_LENGTH))    
     key = str(ran)
     return key
 
+#  removing punctutation from the file
 def removePunctuation(data):
     data = re.sub(r"[,.;@#?!&$]+\ *", " ", data)
     return data
 
+#  Converting file to words
 def getWordsFromLineList(data):
     return data.split(" ")
 
+# counting frequency of words
 def countFrequency(wordsList):
     wordsWithFrequencies = {}
     for word in wordsList:
         wordsWithFrequencies[word] = wordsWithFrequencies.get(word, 0) + 1
     return list(wordsWithFrequencies.items())
 
+# counting frequency occurenece 
 def countFrequencyLength(wordsWithFrequencies):
     frequencies = {}
     for word, frequency in wordsWithFrequencies:
         frequencies[frequency] = frequencies.get(frequency, 0) + 1
     return list(frequencies.items())
 
+# sorting algorithm
 def bubble_sort(lst):
     if len(lst) == 1:
         return print(lst)
@@ -59,6 +64,7 @@ def bubble_sort(lst):
                 lst[j], lst[j + 1] = lst[j + 1], lst[j] 
     return lst
 
+## turning words into encrypted words
 def replaceWords(words, maximumFrequencyOccurence, key):
     replacements = {}
     for word, frequency in words:
@@ -69,7 +75,8 @@ def replaceWords(words, maximumFrequencyOccurence, key):
             newWord = "{0:03d}".format(ord(key[0])) + key[:len(key) // 2] + str(wordASCII) + key[len(key) // 2:] + "{0:03d}".format(ord(key[-1]))
             replacements[word] = newWord
     return replacements
-    
+
+# replacing words with encrypted words 
 def replaceInput(words, replacedWords):
     for word, replacement in replacedWords.items():
         if word in words:
@@ -77,18 +84,25 @@ def replaceInput(words, replacedWords):
             words[index] = replacement
     return words
 
+# joining words to build paragraph again
 def returnEncryptedData(encryptedWords):
     return " ".join(encryptedWords)
 
 
+# initliazing encryption
 def initEncryption(data, key):
+    # converting data from list to str
     if type(data) == list:
         data = "".join(data)
 
+    # checking if key is empty or not
     if not key:
+         # generatting key if it is empty
         key = generateKey()
+    # remving footer of our app from the file
     data = removeDetails(data, "Decryption")
     print(data)
+    # applying all the functions made above
     
     data = removePunctuation(data)
     words = getWordsFromLineList(data)
@@ -99,7 +113,8 @@ def initEncryption(data, key):
     replacedWords = replaceWords(wordsWithFrequencies, maximumFrequencyOccurence, key)
     encryptedWords = replaceInput(words, replacedWords)
     encryptedData = returnEncryptedData(encryptedWords)
-
+    
+    # finally returing encrypted data
     return encryptedData
 
 # replacing ids from words
