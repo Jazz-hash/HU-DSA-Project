@@ -13,7 +13,7 @@ KEY_LENGTH = 12
 FILENAME = "test.txt"
 
 # ? Creating app with Flask
-app = Flask(name)
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # setting smtp sever variables
 app.config['MAIL_SERVER']='smtp.gmail.com'
