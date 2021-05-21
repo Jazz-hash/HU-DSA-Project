@@ -133,6 +133,25 @@
                 Keep it hidden from the people you don't trust for the security
                 of the file and yours too.
               </p>
+              <div class="container">
+                <form class="form-inline w-100 ml-5">
+                  <div class="form-group mt-4 w-50 bg-danger ml-5">
+                    <input
+                      type="text"
+                      placeholder="Enter email"
+                      class="form-control w-100"
+                      id="email"
+                      placeholder="email"
+                    />
+                  </div>
+                  <a type="submit" id="sendMail" class="butn butn-bord">Send</a>
+
+                </form>
+                                  <small id="error" class="text-white d-none"
+                    ><span class="text-danger">*</span> Please enter a valid
+                    email address</small
+                  >
+              </div>
               <p class="lead">
                 <a
                   href="/uploads/{{filename}}"
@@ -141,12 +160,7 @@
                 >
                   <span>Download</span>
                 </a>
-                <a
-                  href="/sendMail?key={{key}}&filename={{filename}}"
-                  class="butn butn-bord"
-                >
-                  <span>Email</span>
-                </a>
+                <br />
               </p>
             </div>
           </div>
@@ -250,5 +264,29 @@
 
     <!-- animated.headline -->
     <script src=".{{ url_for('static', filename= 'js/animated.headline.js') }}"></script>
+    <script>
+      // handline email button click
+      $("#sendMail").on("click", function (e) {
+        e.preventDefault();
+
+        // regex expression for emails;
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+
+        var key = "{{key}}";
+        var filename = "{{filename}}";
+        var email = $("#email").val();
+
+        var URL = "/sendMail?key={{key}}&filename={{filename}}&email=" + email;
+        console.log(key, email);
+
+        if (email != "" && emailReg.test(email)) {
+          $("#error").addClass("d-none");
+
+          window.location.href = URL;
+        } else {
+          $("#error").removeClass("d-none");
+        }
+      });
+    </script>
   </body>
 </html>

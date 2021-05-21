@@ -209,7 +209,7 @@ def index():
         if _type == "encryption":
             uploaded_file = request.files['eFile']
             key = request.form.get("key")
-            if key == "":
+            if key == "" or not key:
                 key = generateKey()
             print(key)
             if uploaded_file.filename != '':
@@ -266,7 +266,7 @@ def index():
 def result():
     key = request.args.get("key")
     filename = request.args.get("filename")
-    if key == "":
+    if key == "" or not key:
         # if not key return to index
         return redirect(url_for('index'))
     # return result page with key and filename
@@ -292,7 +292,8 @@ def sendMail():
 
     key = request.args.get("key")
     filename = request.args.get("filename")
-    msg = Message('Your file is ready', sender = 'travellingdiaries2019@gmail.com', recipients = ['jazzelmehmood6@gmail.com'])
+    email = request.args.get("email")
+    msg = Message('Your file is ready', sender = 'travellingdiaries2019@gmail.com', recipients = [email])
     msg.body = f"Key = {key} \nEnjoy !!"
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER']) + f"/{filename}"
     print(uploads)
