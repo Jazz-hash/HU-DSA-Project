@@ -54,15 +54,47 @@ def countFrequencyLength(wordsWithFrequencies):
     return list(frequencies.items())
 
 # sorting algorithm
-def bubble_sort(lst):
-    if len(lst) == 1:
-        return print(lst)
-        
-    for i in range(len(lst) - 1): 
-        for j in range(0, len(lst) - i -1): 
-            if lst[j][1] < lst[j + 1][1]: 
-                lst[j], lst[j + 1] = lst[j + 1], lst[j] 
-    return lst
+def mergeSort(arr):
+    if len(arr) > 1:
+ 
+         # Finding the mid of the array
+        mid = len(arr)//2
+ 
+        # Dividing the array elements
+        L = arr[:mid]
+ 
+        # into 2 halves
+        R = arr[mid:]
+ 
+        # Sorting the first half
+        mergeSort(L)
+ 
+        # Sorting the second half
+        mergeSort(R)
+ 
+        i = j = k = 0
+ 
+        # Copy data to temp arrays L[] and R[]
+        while i < len(L) and j < len(R):
+            if L[i] < R[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
+ 
+        # Checking if any element was left
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+ 
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
+    return arr
 
 ## turning words into encrypted words
 def replaceWords(words, maximumFrequencyOccurence, key):
@@ -109,7 +141,7 @@ def initEncryption(data, key):
     wordsWithFrequencies = countFrequency(words)
     print(wordsWithFrequencies)
     frequencies = countFrequencyLength(wordsWithFrequencies)
-    maximumFrequencyOccurence = bubble_sort(frequencies)[0][0]
+    maximumFrequencyOccurence = mergeSort(frequencies)[0][0]
     replacedWords = replaceWords(wordsWithFrequencies, maximumFrequencyOccurence, key)
     encryptedWords = replaceInput(words, replacedWords)
     encryptedData = returnEncryptedData(encryptedWords)
